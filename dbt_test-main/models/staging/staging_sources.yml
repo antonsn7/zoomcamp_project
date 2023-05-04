@@ -1,0 +1,194 @@
+version: 2
+
+sources:
+  - name: ext_schema
+    description: Sales activity of the Olist marketplace.
+    database: olist_db
+    schema: ext_schema
+    loader: s3
+    tables:
+      - name: customers
+        external:
+          location: "s3://olist-data/parquet/customers/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: customer_id
+            data_type: TEXT
+          - name: customer_unique_id 
+            data_type: TEXT
+          - name: customer_zip_code_prefix
+            data_type: BIGINT
+          - name: customer_city
+            data_type: TEXT
+          - name: customer_state
+            data_type: TEXT
+
+      - name: geolocation
+        external:
+          location: "s3://olist-data/parquet/geolocation/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: geolocation_zip_code_prefix
+            data_type: BIGINT
+          - name: geolocation_lat
+            data_type: DOUBLE PRECISION
+          - name: geolocation_lng
+            data_type: DOUBLE PRECISION
+          - name: geolocation_city
+            data_type: TEXT
+          - name: geolocation_state
+            data_type: TEXT
+
+      - name: order_items
+        external:
+          location: "s3://olist-data/parquet/order_items/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: order_id
+            data_type: TEXT
+          - name: order_item_id
+            data_type: BIGINT
+          - name: product_id
+            data_type: TEXT
+          - name: seller_id
+            data_type: TEXT
+          - name: shipping_limit_date
+            data_type: TIMESTAMP
+          - name: price
+            data_type: DOUBLE PRECISION
+          - name: freight_value
+            data_type: DOUBLE PRECISION
+
+      - name: order_payments
+        external:
+          location: "s3://olist-data/parquet/order_payments/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: order_id
+            data_type: TEXT
+          - name: payment_sequential
+            data_type: BIGINT
+          - name: payment_type
+            data_type: TEXT
+          - name: payment_installments
+            data_type: BIGINT
+          - name: payment_value
+            data_type: DOUBLE PRECISION
+
+      - name: order_reviews
+        external:
+          location: "s3://olist-data/parquet/order_reviews/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: review_id
+            data_type: TEXT
+          - name: order_id
+            data_type: TEXT
+          - name: review_score
+            data_type: BIGINT
+          - name: review_comment_title
+            data_type: TEXT
+          - name: review_comment_message
+            data_type: TEXT
+          - name: review_creation_date
+            data_type: TIMESTAMP
+          - name: review_answer_timestamp
+            data_type: TIMESTAMP
+
+      - name: orders
+        external:
+          location: "s3://olist-data/parquet/orders/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: order_id
+            data_type: TEXT
+          - name: customer_id
+            data_type: TEXT
+          - name: order_status
+            data_type: TEXT
+          - name: order_purchase_timestamp
+            data_type: TIMESTAMP
+          - name: order_approved_at
+            data_type: TIMESTAMP
+          - name: order_delivered_carrier_date
+            data_type: TIMESTAMP
+          - name: order_delivered_customer_date
+            data_type: TIMESTAMP
+          - name: order_estimated_delivery_date
+            data_type: TIMESTAMP
+
+      - name: product_category_name_translation
+        external:
+          location: "s3://olist-data/parquet/product_category_name_translation/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: product_category_name
+            data_type: TEXT
+          - name: product_category_name_english
+            data_type: TEXT
+          
+      - name: products
+        external:
+          location: "s3://olist-data/parquet/products/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: product_id
+            data_type: TEXT
+          - name: product_category_name
+            data_type: TEXT
+          - name: product_name_lenght
+            data_type: BIGINT
+          - name: product_description_lenght
+            data_type: BIGINT
+          - name: product_photos_qty
+            data_type: BIGINT
+          - name: product_weight_g
+            data_type: BIGINT
+          - name: product_length_cm
+            data_type: BIGINT
+          - name: product_height_cm
+            data_type: BIGINT
+          - name: product_width_cm
+            data_type: BIGINT
+
+      - name: sellers
+        external:
+          location: "s3://olist-data/parquet/sellers/"
+          row_format: >
+            SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
+            STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
+            OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+        columns:
+          - name: seller_id
+            data_type: TEXT
+          - name: seller_zip_code_prefix
+            data_type: BIGINT
+          - name: seller_city
+            data_type: TEXT
+          - name: seller_state
+            data_type: TEXT
+          
