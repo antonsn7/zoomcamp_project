@@ -8,6 +8,8 @@ Olist is an operator of an online e-commerce platform. The platform connects ent
 
 The aim of the project is to provide a visual representation of main sales metrics for Olist's sellers and managers. Using it can help reduce the amount of time spent on manual compilation of the report and analyze sales data more effectively.
 
+See [INSTALL.md](INSTALL.md) for some installation instractions.
+
 ## Data source
 
 The dataset of Brazilian E-Commerce was taken from kaggle.com - [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). It has information of 100k orders from 2016 to 2018 made at multiple marketplaces in Brazil. Its features allows viewing an order from multiple dimensions: from order status, price, payment and freight performance to customer location, product attributes and finally reviews written by customers. A geolocation dataset relating Brazilian zip codes to lat/lng coordinates was also released.
@@ -22,6 +24,7 @@ The dataset of Brazilian E-Commerce was taken from kaggle.com - [Brazilian E-Com
     * Data lake: S3
     * Data warehouse: Redshift
 * Data transformation: dbt
+* Data orchestration: Apache Airflow
 * Data visualization: Metabase
 
 ## Notes
@@ -43,7 +46,3 @@ The dbt scripts are in the [dbt_test-main](dbt).
 ![dashboard](static/img/olist_sales_dashboard.png)
 
 The Olist Sales Overview dashboard shows key sales metrics. Total revenue for 2018 was USD 7.5 million and an average order value was approximately of USD 137. However, we see a drop in sales in September and October. This may be due to the fact that Olist didn't publish this data on kaggle.com.
-
-### Reproducibility
-
-???? See [INSTALL.md](INSTALL.md) for some installation instractions.
